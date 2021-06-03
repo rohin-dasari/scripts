@@ -1,7 +1,8 @@
 #!/usr/bin/bash
 
-# arg1 -> base dir
-# arg2 -> session name (default is "default")
+# arg1 -> tmux session name
+# arg2 -> directory that tmux should start in
+# arg3 -> command to run once session is attached (command gets sent to all open panes)
 
 
 echo "creating new tmux session"
@@ -28,7 +29,8 @@ echo session: $sess
 echo base dir: $base
 echo command: $cmd
 
-sess_exists=$(tmux ls | grep "$sess")
+sess_exists=$(tmux ls | awk -F: '{print $1}' | grep "$sess")
+
 # assumes session does not already exist
 if [ -z "$sess_exists" ]
 then
@@ -44,22 +46,9 @@ then
 		fi
 	done
 	tmux a -t "$sess"
-	#tmux send-keys -t "$sess" "cd $base" C-m
+
 fi
 
-
-#echo $sess
-#
-#thing=$(tmux ls | grep attached)
-#echo "$thing"
-
-#IFS=':' read -ra boop <<< "$thing"
-#for i in "${ADDR[@]}"; do
-#    echo "$i"
-#    echo "here"
-#done
-
-#(tmux a -t "$sess" || tmux new-sess -s "$sess")
 
 
 
